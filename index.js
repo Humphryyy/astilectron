@@ -2,6 +2,7 @@
 'use strict'
 
 const electron = require('electron')
+const store = require('electron-persist-secure/lib/store')
 const {app, BrowserWindow, ipcMain, Menu, MenuItem, Tray, dialog, Notification} = electron
 const consts = require('./src/consts.js')
 const client = require('./src/client.js')
@@ -18,6 +19,13 @@ let quittingApp = false;
 // Single instance
 let lastWindowId = null;
 
+const createStores = () => {
+    new store({
+      configName: "config", // The stores name
+    });
+  };
+  
+
 // App is quitting
 const beforeQuit = () => {
     quittingApp = true;
@@ -26,6 +34,8 @@ const beforeQuit = () => {
 
 // App is ready
 function onReady () {
+    createStores();
+
     // Init
     const screen = electron.screen
     Menu.setApplicationMenu(null)
